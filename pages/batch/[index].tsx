@@ -49,7 +49,7 @@ function index() {
     
   return (
     <>
-    <h3>Batch Details</h3>
+    <h1>Batch Details</h1>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>

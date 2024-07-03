@@ -48,6 +48,7 @@ function Navbar() {
 
     const handleLogout = () => {
         localStorage.removeItem('accessToken')
+        localStorage.removeItem('user')
         if(localStorage.getItem('accessToken')){
             toast.error('something went wrong')
         } else {
@@ -56,12 +57,12 @@ function Navbar() {
         }
     }
 
-    console.log(token);
+    // console.log(token);
     
 
     React.useEffect(() => {
         const accessToken = localStorage.getItem('accessToken')
-        console.log(accessToken);
+        // console.log(accessToken);
         
         if(accessToken !== null || accessToken !== undefined){
             setToken(accessToken)

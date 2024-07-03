@@ -48,6 +48,7 @@ export default function LoginPage() {
         console.log(res);
         if(res?.data){
           localStorage.setItem('accessToken', res?.data?.session?.access_token)
+          localStorage.setItem('user', JSON.stringify(res?.data?.user?.identities[0]?.identity_data))
           window.location.href = '/'
         }
         
