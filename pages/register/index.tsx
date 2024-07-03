@@ -6,7 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -15,9 +14,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import { signup } from '@/pages/api/authentications'
+import { Register } from '@/pages/api/authentications'
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 
 function Copyright(props: any) {
@@ -40,16 +41,23 @@ export default function LoginPage() {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const { mutate, data } = useMutation({
-        mutationFn: (payload) => signup(payload)
+        mutationFn: (payload) => Register(payload),
+        onSuccess: (res) => {
+            if(!res?.error){
+              toast.success(res?.data?.user?.aud)
+              console.log(res);
+              
+            } else {
+              toast.error(res?.error?.message)
+            }
+          },
     })
 
     const onSubmit = (data: any) => {
-        console.log(data);
-
         mutate(data)
     }
 
-    console.log(data);
+    // console.log(data);
 
 
     return (
@@ -96,10 +104,60 @@ export default function LoginPage() {
                             sx={{ mb: 0 }}
                         />
                         {errors.password?.type === 'required' && <span style={{ color: 'red' }}>password is required</span>}
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
+                        
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="name"
+                            label="name"
+                            autoComplete="name"
+                            autoFocus
+                            {...register('name', { required: true })}
+                            sx={{ mb: 0 }}
                         />
+                        {errors.name?.type === 'required' && <span style={{ color: 'red' }}>name is required</span>}
+
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="age"
+                            label="age"
+                            autoComplete="age"
+                            autoFocus
+                            {...register('age', { required: true })}
+                            sx={{ mb: 0 }}
+                        />
+                        {errors.age?.type === 'required' && <span style={{ color: 'red' }}>age is required</span>}
+
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="course"
+                            label="course"
+                            autoComplete="course"
+                            autoFocus
+                            {...register('course', { required: true })}
+                            sx={{ mb: 0 }}
+                        />
+                        {errors.course?.type === 'required' && <span style={{ color: 'red' }}>course is required</span>}
+
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="year"
+                            label="year"
+                            autoComplete="year"
+                            autoFocus
+                            {...register('year', { required: true })}
+                            sx={{ mb: 0 }}
+                        />
+                        {errors.year?.type === 'required' && <span style={{ color: 'red' }}>year is required</span>}
+
+                        <Link href={'/login'} >Already have an account ? Login now</Link>
                         <Button
                             type="submit"
                             fullWidth

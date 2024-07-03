@@ -3,47 +3,32 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/supabase/client'
 
-export async function login(formData: any) {
+
+export const Login = async (payload: any) => {
   const supabase = createClient()
+  return await supabase.auth.signInWithPassword(payload)
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.email as string,
-    password: formData.password as string,
-  }
-
-  const { error } = await supabase.auth.signInWithPassword(data)
-
-  console.log(error);
-  
-
-  // if (error) {
-  //   redirect('/error')
-  // }
-
+  // if(data.user !== null) return data;
+  // if(error !== null) return error
 }
 
-export async function signup(formData: any) {
+export const Register = async (payload: any) => {
   const supabase = createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // const data = {
-  //   email: formData.get('email') as string,
-  //   password: formData.get('password') as string,
-  // }
-
-  const data = {
-    email: formData.email as string,
-    password: formData.password as string,
+  const options = {
+    email: payload.email,
+    password: payload.password,
+    options: {
+      data: {
+        name: payload.name,
+        age: payload.age,
+        course: payload.course,
+        year: payload.year
+      }
+    }
   }
+  return await supabase.auth.signUp(options)
 
-  const { error } = await supabase.auth.signUp(data)
-
-  console.log(error);
-  // if (error) {
-  //   redirect('/error')
-  // }
-
+  // if(data.user !== null) return data;
+  // if(error !== null) return error
 }

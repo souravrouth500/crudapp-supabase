@@ -6,7 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,10 +13,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
-import { login, signup } from '@/pages/api/authentications'
+import Link from 'next/link'
+import { Login } from '@/pages/api/authentications'
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 
 function Copyright(props: any) {
@@ -39,17 +39,29 @@ const defaultTheme = createTheme();
 export default function LoginPage() {
 
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const {mutate, data} = useMutation({
-    mutationFn: (payload) => login(payload)
+  const {mutate} = useMutation({
+    mutationFn: (payload) => Login(payload),
+    // onSuccess: (res) => toast.success(res?.data?.user?.aud),
+    onSuccess: (res) => {
+      if(!res?.error){
+        toast.success(res?.data?.user?.aud)
+        console.log(res);
+        if(res?.data){
+          localStorage.setItem('accessToken', res?.data?.session?.access_token)
+          window.location.href = '/'
+        }
+        
+      } else {
+        toast.error(res?.error?.message)
+      }
+    },
   })
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    
     mutate(data)
   }
 
-  console.log(data);
+  // console.log(data);
   
 
   return (
@@ -71,7 +83,7 @@ export default function LoginPage() {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
-            <Box sx={{mb: 1, width: '100%'}}>
+            {/* <Box sx={{mb: 1, width: '100%'}}> */}
             <TextField
               margin="normal"
               required
@@ -84,9 +96,9 @@ export default function LoginPage() {
               sx={{mb: 0}}
             />
             {errors.email?.type === 'required' && <span style={{ color: 'red'}}>email is required</span>}
-            </Box>
+            {/* </Box> */}
 
-            <Box sx={{mb: 1}}>
+            {/* <Box sx={{mb: 1}}> */}
             <TextField
               margin="normal"
               required
@@ -99,14 +111,15 @@ export default function LoginPage() {
               sx={{mb: 0}}
             />
             {errors.password?.type === 'required' && <span style={{ color: 'red'}}>password is required</span>}
-            </Box>
+            {/* </Box> */}
 
 
            
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
+            <Link href={'/register'} >Don't have an account ? Register now</Link>
             <Button
               type="submit"
               fullWidth
