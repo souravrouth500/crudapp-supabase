@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 
 const defaultTheme = createTheme();
 
-function index() {
+function Index() {
 
     const router = useRouter()
     const id = router.query.index
@@ -78,7 +78,7 @@ function index() {
             setValue('url', singleUser?.data[0]?.submit_url)
             setValue('score', singleUser?.data[0]?.score)
         }
-    }, [id, singleUser])
+    }, [id, singleUser, setValue])
     
     
     return (
@@ -173,4 +173,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

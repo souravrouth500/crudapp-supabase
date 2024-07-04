@@ -1,4 +1,13 @@
-:root {
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+  font-family: "Montserrat", sans-serif !important;
+}
+.active{
+  color: #00A76F !important;
+  background-color: white !important;
+}
+/* :root {
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
@@ -104,4 +113,4 @@ a {
   html {
     color-scheme: dark;
   }
-}
+} */

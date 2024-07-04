@@ -54,8 +54,13 @@ export const removeStudent = async (payload: any) => {
 }
 
 export const getBatchWiseData = async (payload: any) => {
-    
     const supabase = createClient()
 
-    return await supabase.from('students').select().eq('batch_name', payload?.queryKey[1])
+    return await supabase.from('students').select('*').eq('batch_name', payload?.queryKey[1])
+}
+
+export const getCourseData = async (payload: any) => {
+    const supabase = createClient()
+
+    return await supabase.from('students').select('*').eq('course', payload?.queryKey[1])
 }

@@ -42,7 +42,7 @@ export default function LoginPage() {
   const {mutate} = useMutation({
     mutationFn: (payload) => Login(payload),
     // onSuccess: (res) => toast.success(res?.data?.user?.aud),
-    onSuccess: (res) => {
+    onSuccess: (res: any) => {
       if(!res?.error){
         toast.success(res?.data?.user?.aud)
         console.log(res);
@@ -120,7 +120,7 @@ export default function LoginPage() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            <Link href={'/register'} >Don't have an account ? Register now</Link>
+            <Link href={'/register'} >Dont have an account ? Register now</Link>
             <Button
               type="submit"
               fullWidth

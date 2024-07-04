@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 
 const defaultTheme = createTheme();
 
-function index() {
+function Index() {
 
     const router = useRouter()
     const { register, handleSubmit, formState: { errors } } = useForm()
@@ -166,4 +166,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

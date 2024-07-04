@@ -8,74 +8,98 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+import { ColDef } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
+// React Grid Logic
+import "ag-grid-community/styles/ag-grid.css";
+// Core CSS
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { useState } from "react";
+
 import { useQuery } from '@tanstack/react-query'
 import { getBatchWiseData } from '../api/crud'
 import { useRouter } from 'next/router'
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+import TableCourseRendere from '@/components/TableCourseRendere';
 
 
-function index() {
+export interface ResponseObj {
+  error: null | string,
+  data: StudentsResponse[],
+  count: number | null,
+  status: number | null,
+  statusText: string | null,
+}
+export interface StudentsResponse {
+  id: number,
+  student_name: string,
+  batch_name: string,
+  course: string,
+  submit_url: string,
+  score: number,
+  year: number,
+  action: any
+}
+
+
+function Batch() {
 
   const router = useRouter()
   const slug = router.query.index
-  const {data: batchWiseDataResponse} = useQuery({
+  const { data: batchWiseDataResponse } = useQuery({
     queryKey: ['batchWiseData', slug],
     queryFn: (slug) => getBatchWiseData(slug)
   })
 
   console.log(slug);
-  
+
   console.log(batchWiseDataResponse);
-  
-    
+
+  const defaultColDef = React.useMemo<ColDef>(() => {
+    return {
+      flex: 1,
+    };
+  }, []);
+
+  const [colDefs, setColDefs] = useState<ColDef<StudentsResponse>[]>([
+    {
+      field: "student_name",
+      headerName: "Name"
+    },
+    {
+      field: "batch_name",
+      headerName: "Batch",
+    },
+    { field: "course",
+      cellRenderer: TableCourseRendere
+     },
+    {
+      field: "submit_url",
+      headerName: "URL"
+    },
+    { field: "score" },
+    { field: "year" },
+  ]);
+
+
   return (
     <>
-    <h1>Batch Details</h1>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>#</StyledTableCell>
-            <StyledTableCell align="right">Student</StyledTableCell>
-            <StyledTableCell align="right">Course</StyledTableCell>
-            <StyledTableCell align="right">Year</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {batchWiseDataResponse?.data?.map((row: any, index: any) => (
-            <StyledTableRow key={row.id}>
-              <StyledTableCell component="th" scope="row">
-                {index +1}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.student_name}</StyledTableCell>
-              <StyledTableCell align="right">{row.course}</StyledTableCell>
-              <StyledTableCell align="right">{row?.year}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <h1>Batch Details</h1>
+
+      <div
+        className={
+          "ag-theme-quartz-dark"
+        }
+        style={{ width: "100%", height: "100%" }}
+      >
+        <AgGridReact
+          rowData={batchWiseDataResponse?.data}
+          columnDefs={colDefs}
+          defaultColDef={defaultColDef}
+        />
+      </div>
+
     </>
   )
 }
 
-export default index
+export default Batch

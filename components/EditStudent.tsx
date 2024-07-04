@@ -72,7 +72,7 @@ function EditStudent({id, status}: any) {
             setValue('url', singleUser?.data[0]?.submit_url)
             setValue('score', singleUser?.data[0]?.score)
         }
-    }, [id, singleUser])
+    }, [id, singleUser, setValue])
     
     
     return (

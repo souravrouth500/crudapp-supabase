@@ -1,7 +1,6 @@
+'use client'
 import { Grid, Typography } from '@mui/material'
-import { grey } from '@mui/material/colors';
-import React from 'react'
-import { Interface } from 'readline'
+import React, { useEffect, useState } from 'react'
 
 interface User {
     name: string | null;
@@ -13,11 +12,23 @@ interface User {
 
 function Profile() {
 
-    const user: any = JSON.parse(window.localStorage.getItem('user'))
+    const [user, setUser] = useState<User | null>(null)
+
+    // const user: any = JSON.parse(localStorage.getItem('user'))
+
+    useEffect(() => {
+        const userString = window.localStorage.getItem('user'); // userString is of type 'string | null'
+
+        if (userString !== null) {
+            setUser(JSON.parse(userString));
+            // Now you can safely use 'user' as an object parsed from JSON
+        }
+    }, [])
+
 
     return (
         <>
-        <h3 style={{ textAlign: 'center'}}>User's Dashboard</h3>
+            <h3 style={{ textAlign: 'center' }}>User Dashboard</h3>
             <Grid container maxWidth={'md'} mx={'auto'} sx={{ border: '1px solid grey', borderRadius: '10px', mt: '80px', overflow: 'hidden' }}>
                 <Grid item xs={12} sm={6} sx={{ bgcolor: '#ffffffb3', p: 2, height: '100%' }}>
                     <Typography>Email: {user?.email}</Typography>
